@@ -6,8 +6,10 @@
     xmlns:form="sap.ui.layout.form"
     xmlns:layout="sap.ui.layout"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns:t="sap.ui.table">
-    <f:DynamicPage id="dynamicPageId" headerExpanded="true" toggleHeaderOnTitleClick="false">
+    xmlns:t="sap.ui.table"
+    height="100%">
+
+    	<f:DynamicPage id="dynamicPageId" toggleHeaderOnTitleClick="false"  showFooter="true" >
         <!-- DynamicPage Header -->
         <f:header>
             <f:DynamicPageHeader pinnable="false">
@@ -15,44 +17,48 @@
                     <form:content>
                         <HBox alignItems="Center">
                             <Label text="금액 :"/>
-                            <Input class="sapUiTinyMarginBegin" id="input1" />
+                            <Input class="sapUiTinyMarginBegin" id="input1" description="KRW"
+
+							/>
                             <layoutData>
                                 <layout:GridData span="XL11 L10 M6 S12"/>
                             </layoutData>
                         </HBox>
-                        <HBox alignItems="Center" justifyContent="End">
-                            <Button id="button1" press="onPressBTN" type="Emphasized" text="변환"/>
+                        <HBox alignItems="Start" justifyContent="Center">
+                            <Button id="button1" press=".onPress" type="Emphasized" text="계산"/>
                             <layoutData>
-                                <layout:GridData span="XL1 L2 M6 S12"/>
+                                <layout:GridData span="XL1 L8 M8 S8"/>
                             </layoutData>
                         </HBox>
                         <HBox alignItems="Center">
-                            <Title text="환율정보"/>
+                            <Title title="환율정보" level="H2" text="1 대한민국 원 ="/>
                             <layoutData>
                                 <layout:GridData linebreak="true" span="XL1 L1 M2 S12"/>
                             </layoutData>
                         </HBox>
                         <HBox alignItems="Center">
                             <Label text="달러 :"/>
-                            <Input class="sapUiTinyMarginBegin" id="input2" change="onChange" liveChange="onLiveChange"/>
+                            <Input class="sapUiTinyMarginBegin" id="input2"  liveChange=".onLiveChange" editable="true" description="USD"
+								value="{path:'/USD', type:'sap.ui.model.type.Currency', 
+								formatOptions: {showMeasure: false}}"/>
                             <layoutData>
                                 <layout:GridData linebreak="true" span="XL3 L3 M6 S12"/>
                             </layoutData>
                         </HBox>
                         <HBox alignItems="Center">
                             <Label text="유로 :"/>
-                            <Input class="sapUiTinyMarginBegin" id="input3"
-                                value="{
-                                    path:'inputSample>/euroInput',
-                                    type: 'sap.ui.model.type.Currency'
-                                }"/>
+                            <Input class="sapUiTinyMarginBegin" id="input3" editable="true" description="EUR"
+								value="{path:'/EUR', type:'sap.ui.model.type.Currency', 
+								formatOptions: {showMeasure: false}}"/>
                             <layoutData>
                                 <layout:GridData span="XL3 L3 M6 S12"/>
                             </layoutData>
                         </HBox>
                         <HBox alignItems="Center">
                             <Label text="엔화 :"/>
-                            <Input class="sapUiTinyMarginBegin" id="input4" />
+                            <Input class="sapUiTinyMarginBegin" id="input4" editable="true"  description="JPY"
+								value="{path:'/JPY', type:'sap.ui.model.type.Currency', 
+								formatOptions: {showMeasure: false}}" />
                             <layoutData>
                                 <layout:GridData span="XL3 L3 M6 S12"/>
                             </layoutData>
@@ -63,12 +69,9 @@
         </f:header>
         <f:content>
             <Table id="table"
-                inset="false"
+				
                 items="{
-                    path: 'tableData>/',
-                    sorter: {
-                        path: 'Name'
-                    }
+					path: 'tableData>/'
                 }">
                 <headerToolbar>
                     <OverflowToolbar>
@@ -82,7 +85,7 @@
                         <Text text="화폐" />
                     </Column>
                     <Column width="40%" hAlign="End">
-                        <Text text="환율" />
+                        <Text text="현재 환율 [1 대한민국 원] 기준" />
                     </Column>
                     <Column width="40%" hAlign="End">
                         <Text text="환산금액" />
@@ -93,16 +96,15 @@
                         <cells>
                             <ObjectIdentifier title="{tableData>currencyName}"/>
                             <ObjectNumber
-                                visible="{= ${tableData>rate} !== null}"
                                 number="{tableData>rate}"
                                 unit="원"
                                />
                             <ObjectNumber
-                                number="{
-                                    parts:[{path:'tableData>value'},{path:'tableData>currencyType'}],
-                                    type: 'sap.ui.model.type.Currency',
-                                    formatOptions: {showMeasure: true}
-                                }"/>
+                                number="{  parts:[{path:'tableData>value'},{path:'tableData>currencyType'}],
+								type: 'sap.ui.model.type.Currency',
+								formatOptions: {showMeasure: true,
+									maxFractionDigits: 2,
+									roundingMode: 'away_from_zero'}}"/>
                         </cells>
                     </ColumnListItem>
                 </items>
